@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+  compileSdkVersion versions.compileSdk
+  buildToolsVersion versions.buildTools
+
+  defaultConfig {
+    applicationId "${versions.group}.sample"
+    minSdkVersion versions.minSdk
+    targetSdkVersion versions.compileSdk
+    versionCode versions.code
+    versionName versions.name
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  implementation deps.kotlin.stdLibJre8
+
+  implementation project(':foundation-inject')
+  implementation project(':foundation-view')
+
+  implementation deps.support.v7
+
+  kapt deps.dagger.compiler
+  implementation deps.dagger.source
+
+  kapt deps.dagger.android.compiler
+  implementation deps.dagger.android.source
+
+  testImplementation deps.junit
+  testImplementation deps.truth
+
+  androidTestImplementation(deps.espresso, { exclude group: 'com.android.support', module: 'support-annotations' })
+}
